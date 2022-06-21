@@ -4,6 +4,8 @@ package com.twitter.listeners;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.twitter.extentmanager.ExtentManager;
+import com.twitter.extentmanager.ExtentTestManager;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -29,49 +31,22 @@ public class TestListeners extends testBase implements ITestListener{
 
 	public void onTestStart(ITestResult result) {
 		System.out.println("Beginning Test Execution: " + result.getMethod().getMethodName());
-		
+		System.out.println(("*** Running test method " + result.getMethod().getMethodName() + "..."));
+		ExtentTestManager.startTest(result.getMethod().getMethodName());
 	}
 
 	public void onTestSuccess(ITestResult result) {
-		
-		//getting the current test's name
-		String testName = result.getMethod().getMethodName();
-		
-		//Test Case: LoanCalculatorTest PASSED <-- will be bolded
-		String logText = "<b>" + "Test Case: " + testName + "  PASSED" + "</b>";
-		
-		Markup m = MarkupHelper.createLabel(logText, ExtentColor.GREEN);
-		
-		//Get the current thread's testReport and add the details to the Test Report
-		testReport.get().log(Status.INFO, "------ Test Execution Completed ------");
-		
-		//Get the current thread's testReport and add a 'Pass' status with the specified markup details
-		testReport.get().pass(m);
+
+		System.out.println("*** Executed " + result.getMethod().getMethodName() + " test successfully...");
+		ExtentTestManager.getTest().log(Status.PASS, "Test passed");
 		
 	}
 
 	public void onTestFailure(ITestResult result) {
-		/*
-		 * 1. Failure's exception (stackTrace) to be presented in the Report
-		 * 2. Screenshot of the browser window at time of exception/failure
-		 */
-		
 		String testName = result.getMethod().getMethodName();
 		String screenShotPath = "";
-		/*
-		 * 'result' contains all details of the current test method's execution
-		 * from 'result' we are going to get the exception details stored in 'Throwable' class (getThrowable())
-		 * getStackTrace() method will return the StackTrace as an Array
-		 * toString() method to convert from Array to a string and store the stackTrace in a string variable
-		 */
-		
-		String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
-		
-		testReport.get().info("<details>" + "<summary>" + "<b>" + "<font color=red>"
-						+ "Exception Occurred: Click to View Details" + "</font>" + "</b>" + "</summary>" 
-						+ exceptionMessage.replaceAll(",", "<br>") + "</details>" + " \n");
-							//Replacing all of the commas (,) with a line break "<br>"
-		
+		System.out.println("*** Test execution " + result.getMethod().getMethodName() + " failed...");
+		ExtentTestManager.getTest().log(Status.FAIL, "Test Failed");
 		//Take the Screen shot
 		try {
 			screenShotPath = TakeScreenshot.takeScreenshot(testName);
@@ -82,10 +57,10 @@ public class TestListeners extends testBase implements ITestListener{
 		
 		//Add the screenshot to the report
 		try {
-			testReport.get().addScreenCaptureFromPath(screenShotPath); //Adding the screen shot at the bottom of the report
+			ExtentTestManager.getTest().addScreenCaptureFromPath(screenShotPath); //Adding the screen shot at the bottom of the report
 			
 			//Attach the screen shot in-line
-			testReport.get().info("<b>" + "<font color=red>" + "Screenshot of Failure" + 
+			ExtentTestManager.getTest().info("<b>" + "<font color=red>" + "Screenshot of Failure" +
 									"</font>" + "</b>", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());			
 		} catch (IOException e) {
 			
@@ -94,8 +69,8 @@ public class TestListeners extends testBase implements ITestListener{
 		
 		String failureMessage = "<b>" + "Test Case: " + testName + " FAILED" + "</b>";
 		Markup m = MarkupHelper.createLabel(failureMessage, ExtentColor.RED);
-		testReport.get().log(Status.INFO, "------ Test Execution Completed ------");
-		testReport.get().fail(m);
+		ExtentTestManager.getTest().log(Status.INFO, "------ Test Execution Completed ------");
+		ExtentTestManager.getTest().fail(m);
 		
 		
 	}
@@ -111,19 +86,14 @@ public class TestListeners extends testBase implements ITestListener{
 	}
 
 	public void onStart(ITestContext context) {
-		
-		//System.out.println(context.getName());
-		
-		//Create the test in ExtentReports at the time of execution start
-		test = extent.createTest(context.getName());
-		
-		//set the created test to refer to the current thread (in case of parallel execution)
-		testReport.set(test);
-		
+
+		System.out.println("*** Test Suite " + context.getName() + " started ***");
 	}
 
 	public void onFinish(ITestContext context) {
-		// TODO Auto-generated method stub
+		System.out.println(("*** Test Suite " + context.getName() + " ending ***"));
+		ExtentTestManager.endTest();
+		ExtentManager.getInstance().flush();
 		
 	}
 
