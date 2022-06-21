@@ -1,17 +1,10 @@
 package base;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.poi.EncryptedDocumentException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -23,15 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.DataProvider;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import com.aventstack.extentreports.reporter.configuration.Theme;
+import org.testng.annotations.*;
 
 import utilities.ReadingExcel;
 
@@ -50,141 +35,9 @@ public class testBase {
 	public static WebDriverWait wait;
 	public static Logger log = Logger.getLogger(testBase.class);
 	public static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
-	static int x,sum;
-	static int nextSum;
-	static int avg;
-	private static int Counter = 1;
-	private static int nextCounter = 1;
-	
-	//Adding Extent Report classes
-	public static ExtentSparkReporter sparkReporter;
-	public static ExtentReports extent;
-	public static ExtentTest test;
-	public static ThreadLocal<ExtentTest> testReport = new ThreadLocal<ExtentTest>();
-	
-	//Method to return the current time as Day_Mon_Date @ hh_mm (12-hour format)
-		public String getCurrentTime() {
-			Date myDate = new Date();
-			
-			String fileName = myDate.toString().replace(":", "_").replace(" ", "_");
-			
-			String day = fileName.substring(0, 10);
-		
-			String time = fileName.substring(11, 19);
 
-			String[] x = time.split("_");
 
-			String AMPM = "";
 
-			int hour = Integer.valueOf(x[0]);
-			if (hour >= 12) {
-				AMPM = "PM";
-				if (hour != 12) {
-					hour = hour - 12;
-				}
-			} else {
-				AMPM = "AM";
-			}
-			/*NOTE: Added the below condition in case the hour is 12:00am (midnight = 00:00 in 24hr format)*/
-			if(hour == 0) {
-				hour = 12;
-			}
-			String finalDateTime = day + " @ " + hour + "_" + x[1] + " " + AMPM;
-			return finalDateTime;
-		}
-	
-	@BeforeSuite //must run before any test class files
-	public static void setUp() {
-		// set up config, object repo files, set up logging, extent reports, invoke the
-		// browser
-
-		if (driver == null) {
-
-			// Configure log4j properties file
-			PropertyConfigurator.configure(System.getProperty("user.dir") + "/src/test/resources/Properties/log4j.properties");
-
-			// finding the Config properties file
-			try {
-				fis = new FileInputStream(
-						System.getProperty("user.dir") + "/src/test/resources/Properties/Config.properties");
-				log.info("Config File Found!");
-			} catch (FileNotFoundException e) {
-				log.error("Config file Not Found, Check File Path");
-				log.info(e.getMessage());
-
-			}
-			try { // loading the config properties file
-				Config.load(fis);
-				log.info("Config File loaded successfully");
-			} catch (IOException e) {
-				log.error("Error whole loading Config File");
-				log.info(e.getMessage());
-				;
-			}
-
-			// get ObjRepo properties file
-			try {
-				fis = new FileInputStream(
-						System.getProperty("user.dir") + "/src/test/resources/Properties/ObjRepo.properties");
-				log.info("Object Repository File Found!");
-			} catch (FileNotFoundException e) {
-				log.error("Object Repository File Not Found, Check File Path");
-				log.info(e.getMessage());
-			}
-			try {
-				ObjRepo.load(fis);
-				log.info("Object Repository loaded successfully");
-			} catch (IOException e) {
-				log.error("Error while loading Object Repository file");
-				log.info(e.getMessage());
-			}
-
-			// initialize the browser
-			if (Config.getProperty("browser").equalsIgnoreCase("firefox")) {
-				System.setProperty("webdriver.gecko.driver","C:\\Web Drivers\\geckodriver.exe");
-				driver = new FirefoxDriver();
-				log.info("Firefox was launched successfully");
-				
-				
-			} else if (Config.getProperty("browser").equalsIgnoreCase("chrome")) {
-				System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"\\src\\test\\resources\\driverExecutables\\chromedriver.exe");
-				driver = new ChromeDriver();
-				log.info("Chrome was launched successfully");
-			}
-
-			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(Integer.valueOf(Config.getProperty("implicit.wait")),TimeUnit.SECONDS);
-
-			 //set up explicit wait
-			 wait = new WebDriverWait(driver, Integer.valueOf(Config.getProperty("explicit.wait")));
-			 
-			
-			
-			//Configure Extent Reports
-			sparkReporter = new ExtentSparkReporter("./ExtentReports/extent.html");
-			sparkReporter.config().setEncoding("utf-8");
-			sparkReporter.config().setDocumentTitle("Bootcamp 2020 - Test Automation Report");
-			sparkReporter.config().setReportName("John'Tay Abbey - Twitter POM w/Page Factory Test Report");
-			sparkReporter.config().setTheme(Theme.DARK);
-			sparkReporter.config().setTimeStampFormat("EEEE, MMMM dd, yyyy, hh:mm a '('zzz')'");
-			
-			//instantiate the ExtentReport class
-			extent = new ExtentReports();
-			extent.attachReporter(sparkReporter);//attaching the sparkReporter configurations
-			//to the extent report object
-			
-			//add more details to the report
-			extent.setSystemInfo("Automation Engineer", "John'Tay Abbey");
-			extent.setSystemInfo("Organization","PCS Consulting");
-			extent.setSystemInfo("Product Team","Lions");
-			extent.setSystemInfo("Build #","PCS-46.9");
-			
-			
-			
-			
-			
-		}
-	}
 	//selecting a element from a drop down
 	public static void select(String key, String optionType, String option) {
 		try {
@@ -211,58 +64,28 @@ public class testBase {
 		}
 	}
 	
-	public static void startBrowser(String key, String URL) {
+	public static WebDriver startBrowser(String browser, String URL) {
 		// initialize the browser
-		if (key.equalsIgnoreCase("firefox")) {
-			System.setProperty("webdriver.gecko.driver","C:\\Web Drivers\\geckodriver.exe");
-			driver = new FirefoxDriver();
-			log.info("Firefox was launched successfully");
-			driver.get(URL);
-			log.info(key + " Navigated to "+ URL);
-			driver.manage().window().maximize();
-			
-		} else if (key.equalsIgnoreCase("chrome")) {
-			System.setProperty("webdriver.chrome.driver","C:\\Users\\johnt\\eclipse-workspace\\PageObjectModel\\src\\test\\resources\\driverExecutables\\chromedriver.exe");
-			driver = new ChromeDriver();
-			log.info("Chrome was launched successfully");
-			driver.get(URL);
-			log.info(key + " Navigated to "+ URL);
-			driver.manage().window().maximize();
+		if (driver != null) {
+			if (browser.equalsIgnoreCase("firefox")) {
+				System.setProperty("webdriver.gecko.driver", "C:\\Web Drivers\\geckodriver.exe");
+				driver = new FirefoxDriver();
+				log.info("Firefox was launched successfully");
+				log.info(browser + " Navigated to " + URL);
+				driver.manage().window().maximize();
+
+			} else if (browser.equalsIgnoreCase("chrome")) {
+				System.setProperty("webdriver.chrome.driver", "C:\\Users\\johnt\\eclipse-workspace\\PageObjectModel\\src\\test\\resources\\driverExecutables\\chromedriver.exe");
+				driver = new ChromeDriver();
+				log.info("Chrome was launched successfully");
+				driver.get(URL);
+				log.info(browser + " Navigated to " + URL);
+				driver.manage().window().maximize();
+			}
 		}
+		return driver;
 	}
-	
-	//method to group all the prices of a product and get the sum and the average 
-public static void calculateAveragePageProductPrice() {
-		
-		Config.getProperty("implicit.wait");
-List<WebElement> priceAmount = driver.findElements(By.xpath("//div[@class ='payment-section']//span[1]"));
-		Config.getProperty("explicit.wait");
-		for (int i = 0; i < priceAmount.size(); i++) {
-			Config.getProperty("explicit.wait");
-			Integer List = Integer.valueOf(priceAmount.get(i).getText().replace("$", "").replace(",", ""));
-		
-			 ArrayList<Integer> total = new ArrayList<Integer>();
-			 Config.getProperty("explicit.wait");
-			total.add(List);
-			 Config.getProperty("explicit.wait");
-			System.out.println(total +" List of numbers");
-			Config.getProperty("explicit.wait");
-			  
-			//get the total price of the numbers in an array
-			 sum = 0;
-			for(int x = 0; x < total.size(); x++) {
-			Config.getProperty("explicit.wait");
-				Counter = nextCounter;
-				sum = nextSum;
-			    nextSum += total.get(x);
-			    avg = nextSum/nextCounter++;
-			    
-				Config.getProperty("explicit.wait");
-			System.out.println("The total price is "+nextSum);
-			System.out.println(avg+" is the Average price");
-									 
-		}}}
-	//Method to enter text into a text box
+
 	public static void enterText(String key, String value) {
 		try {
 		if(key.endsWith("_XPATH")) {
@@ -371,12 +194,8 @@ List<WebElement> priceAmount = driver.findElements(By.xpath("//div[@class ='paym
 		driver.quit();
 		log.info("Closing the browser");
 		fis.close();
-		extent.flush();
+
 	}
 
-	@BeforeMethod
-	public static void browserNavigation() {
-		driver.navigate().to(Config.getProperty("QA_URL"));
-		log.info("Navigated to: " + Config.getProperty("QA_URL"));
-	}
+
 }
