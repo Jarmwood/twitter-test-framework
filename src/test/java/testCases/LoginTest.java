@@ -21,7 +21,6 @@ import base.testBase;
  */
 public class LoginTest extends testBase {
 	WebDriver driver;
-
 	loginPage login = new loginPage(driver);
 
 
@@ -34,7 +33,7 @@ public class LoginTest extends testBase {
 		tearDown();
 	}
 	
-	
+
 	@Test(dataProvider = "getTestData")
 	public void VerifyInvalidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
 		startBrowser("chrome","https://www.Twitter.com");
