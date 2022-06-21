@@ -27,17 +27,16 @@ public class LoginTest extends testBase {
 
 
 	@Test(dataProvider = "getTestData")
-	public void VerifyValidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
-		setUp();
+	public void VerifyValidLogin() {
+
 		startBrowser("chrome","https://www.Twitter.com");
 		login.login_Twitter(UserName, Password);
-		tearDown();
+
 	}
 	
 	
 	@Test(dataProvider = "getTestData")
 	public void VerifyInvalidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
-		setUp();
 		startBrowser("chrome","https://www.Twitter.com");
 		login.invalidLogin_Twitter(UserName, Password);
 		tearDown();

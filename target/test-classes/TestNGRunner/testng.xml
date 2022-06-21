@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
 	<listeners>
-		<listener class-name="listeners.TestListeners" />
+		<listener class-name="com.twitter.listeners.TestListeners" />
 	</listeners>
 	<test name="Test">
 		<classes>
