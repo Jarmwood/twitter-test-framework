@@ -27,11 +27,11 @@ public class LoginTest extends testBase {
 
 
 	@Test(dataProvider = "getTestData")
-	public void VerifyValidLogin() {
+	public void VerifyValidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
 
 		startBrowser("chrome","https://www.Twitter.com");
 		login.login_Twitter(UserName, Password);
-
+		tearDown();
 	}
 	
 	
