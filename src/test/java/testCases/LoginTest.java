@@ -20,23 +20,29 @@ import base.testBase;
  * 
  */
 public class LoginTest extends testBase {
-	WebDriver driver;
-	loginPage login = new loginPage(driver);
+
+	loginPage login;
 
 
 
 	@Test(dataProvider = "getTestData")
 	public void VerifyValidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
-
-		startBrowser("chrome","https://www.Twitter.com");
-		login.login_Twitter(UserName, Password);
+		WebDriver driver = testBase.startBrowser("chrome","https://www.Twitter.com");
+		login = new loginPage(driver);
+		login.signinUser().sendUsername(UserName).sendPassword(Password).clickLoginButton();
+			Thread.sleep(2000);
+			if(homeProfile.isDisplayed()) {
+				System.out.println("User successfully logged into Twitter account");
+				//log.error("User successfully logged into Twitter account");
+			}
 		tearDown();
 	}
 	
 
 	@Test(dataProvider = "getTestData")
 	public void VerifyInvalidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
-		startBrowser("chrome","https://www.Twitter.com");
+		WebDriver driver = testBase.startBrowser("chrome","https://www.Twitter.com");
+		new loginPage(driver);
 		login.invalidLogin_Twitter(UserName, Password);
 		tearDown();
 	}
