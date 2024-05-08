@@ -2,8 +2,11 @@ package base;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
-
+import Enums.browserTypes;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -12,95 +15,109 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
-
 import utilities.ReadingExcel;
 
 public class testBase {
 
-	public static void main(String[] args) {
-		// super class for all our test cases --> all test cases classes will extend
-		// this class
-		
-	}
+	private static WebDriver driver;
+	private static Properties Config = new Properties();
+	private static Properties ObjRepo = new Properties();
+	private static FileInputStream fis;
+	private static WebDriverWait wait;
+	private static Logger log = Logger.getLogger(testBase.class);
+	private static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
 
-	public static WebDriver driver;
-	public static Properties Config = new Properties();
-	public static Properties ObjRepo = new Properties();
-	public static FileInputStream fis;
-	public static WebDriverWait wait;
-	public static Logger log = Logger.getLogger(testBase.class);
-	public static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
-
-
-
-	//selecting a element from a drop down
-	public static void select(String key, String optionType, String option) {
-		try {
-		if (key.endsWith("_XPATH")) {
-			WebElement dropdownElement = driver.findElement(By.xpath(ObjRepo.getProperty(key)));
-			Select options = new Select(dropdownElement);
-			if(optionType.equals("value")) {
-				options.selectByValue(option);
-			}else if (optionType.equals("text")) {
-				options.selectByVisibleText(option);
-			}
-		}else if (key.endsWith("_CSS")) {
-			WebElement dropdownElement = driver.findElement(By.cssSelector(ObjRepo.getProperty(key)));
-			Select options = new Select(dropdownElement);
-			if(optionType.equals("value")) {
-				options.selectByValue(option);
-			}else if (optionType.equals("text")) {
-				options.selectByVisibleText(option);
-			}}
-		log.info(option + " was Selected from" +key+ " drop down");
-		}catch(Throwable t) {
-			//log.error("Error while Selecting "+ option + "from "+ key + " drop down" );
-			//log.info(t.getMessage());
-		}
-	}
 	
-	public static WebDriver startBrowser(String browser, String URL) {
+	public static WebDriver startBrowser(String URL) {
+		String coreURL = "https://twitter.com/";
+		browserTypes browser;
+		try {
+			Config.load(Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/test/resources/Properties/Config.properties")));
+		} catch (IOException ignored) {
+		}
+
 		// initialize the browser
 		if (driver != null) {
-			if (browser.equalsIgnoreCase("firefox")) {
-				System.setProperty("webdriver.gecko.driver", "C:\\Web Drivers\\geckodriver.exe");
-				driver = new FirefoxDriver();
-				log.info("Firefox was launched successfully");
-				log.info(browser + " Navigated to " + URL);
-				driver.manage().window().maximize();
-
-			} else if (browser.equalsIgnoreCase("chrome")) {
-				System.setProperty("webdriver.chrome.driver", "C:\\Users\\johnt\\eclipse-workspace\\PageObjectModel\\src\\test\\resources\\driverExecutables\\chromedriver.exe");
-				driver = new ChromeDriver();
-				log.info("Chrome was launched successfully");
-				driver.get(URL);
-				log.info(browser + " Navigated to " + URL);
-				driver.manage().window().maximize();
+			browser = browserTypes.valueOf(Config.getProperty("browserConfig").toUpperCase());
+			switch (browser) {
+				case FIREFOX:
+					WebDriverManager.firefoxdriver().clearDriverCache().setup();
+					driver = new FirefoxDriver();
+					log.info("Firefox was launched successfully");
+					log.info(browser + " Navigated to " + URL);
+					driver.manage().window().maximize();
+				case EDGE:
+					WebDriverManager.edgedriver().clearDriverCache().setup();
+					driver = new EdgeDriver();
+					log.info("EdgeDriver was launched successfully");
+					log.info(browser + " Navigated to " + URL);
+					driver.manage().window().maximize();
+				case SAFARI:
+					WebDriverManager.safaridriver().clearDriverCache().setup();
+					driver = new SafariDriver();
+					log.info("safaridriver was launched successfully");
+					log.info(browser + " Navigated to " + URL);
+					driver.manage().window().maximize();
+				default:
+					WebDriverManager.chromedriver().clearDriverCache().setup();
+					driver = new ChromeDriver();
+					log.info("chromedriver was launched successfully");
+					log.info(browser + " Navigated to " + URL);
+					driver.manage().window().maximize();
 			}
 		}
-		return driver;
-	}
+        return driver;
+    }
 
-	public static void enterText(String key, String value) {
-		try {
-		if(key.endsWith("_XPATH")) {
-			driver.findElement(By.xpath(ObjRepo.getProperty(key))).clear();
-			driver.findElement(By.xpath(ObjRepo.getProperty(key))).sendKeys(value);
-		}else if(key.endsWith("_CSS")) {
-			driver.findElement(By.cssSelector(ObjRepo.getProperty(key))).clear();
-			driver.findElement(By.cssSelector(ObjRepo.getProperty(key))).sendKeys(value);
-		}
-		log.info(value + " was entered in " +key+ "input element");
-		}catch(Throwable t) {
-			//log.error("Error While Entering "+ value + " in "+ key + " input box");
-		//	log.info(t.getMessage());
+//selecting an element from a dropdown
+		public static void select (String key, String optionType, String option){
+			try {
+				if (key.endsWith("_XPATH")) {
+					WebElement dropdownElement = driver.findElement(By.xpath(ObjRepo.getProperty(key)));
+					Select options = new Select(dropdownElement);
+					if (optionType.equals("value")) {
+						options.selectByValue(option);
+					} else if (optionType.equals("text")) {
+						options.selectByVisibleText(option);
+					}
+				} else if (key.endsWith("_CSS")) {
+					WebElement dropdownElement = driver.findElement(By.cssSelector(ObjRepo.getProperty(key)));
+					Select options = new Select(dropdownElement);
+					if (optionType.equals("value")) {
+						options.selectByValue(option);
+					} else if (optionType.equals("text")) {
+						options.selectByVisibleText(option);
+					}
+				}
+				log.info(option + " was Selected from" + key + " drop down");
+			} catch (Throwable t) {
+				//log.error("Error while Selecting "+ option + "from "+ key + " drop down" );
+				//log.info(t.getMessage());
 			}
 		}
+		public static void enterText (String key, String value){
+			try {
+				if (key.endsWith("_XPATH")) {
+					driver.findElement(By.xpath(ObjRepo.getProperty(key))).clear();
+					driver.findElement(By.xpath(ObjRepo.getProperty(key))).sendKeys(value);
+				} else if (key.endsWith("_CSS")) {
+					driver.findElement(By.cssSelector(ObjRepo.getProperty(key))).clear();
+					driver.findElement(By.cssSelector(ObjRepo.getProperty(key))).sendKeys(value);
+				}
+				log.info(value + " was entered in " + key + "input element");
+			} catch (Throwable t) {
+				//log.error("Error While Entering "+ value + " in "+ key + " input box");
+				//	log.info(t.getMessage());
+			}
+		}
+
 	//method to click on an element
 	public static void click(String key) {
 		try {
