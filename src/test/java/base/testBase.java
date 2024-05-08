@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Properties;
 import Enums.browserTypes;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -26,23 +27,23 @@ import utilities.ReadingExcel;
 
 public class testBase {
 
-	private static WebDriver driver;
-	private static Properties Config = new Properties();
-	private static Properties ObjRepo = new Properties();
-	private static FileInputStream fis;
-	private static WebDriverWait wait;
-	private static Logger log = Logger.getLogger(testBase.class);
-	private static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
+	public static WebDriver driver;
+	public static Properties Config = new Properties();
+	public static Properties ObjRepo = new Properties();
+	public static FileInputStream fis;
+	public static WebDriverWait wait;
+	public static Logger log = Logger.getLogger(testBase.class);
+	public static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
 
 	
 	public static WebDriver startBrowser(String URL) {
-		String coreURL = "https://twitter.com/";
+		String coreURL;
 		browserTypes browser;
 		try {
 			Config.load(Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/test/resources/Properties/Config.properties")));
 		} catch (IOException ignored) {
 		}
-
+		coreURL = Config.getProperty("QA_URL");
 		// initialize the browser
 		if (driver != null) {
 			browser = browserTypes.valueOf(Config.getProperty("browserConfig").toUpperCase());
@@ -72,6 +73,7 @@ public class testBase {
 					log.info(browser + " Navigated to " + URL);
 					driver.manage().window().maximize();
 			}
+			driver.get(coreURL+URL);
 		}
         return driver;
     }
@@ -155,7 +157,7 @@ public class testBase {
 	
 	//method to wait for all elements on a web page to load
 	public static void waitUntilVisible() { 
-		 wait = new WebDriverWait(driver, Integer.valueOf(Config.getProperty("wait.VisibleForAll")));
+		 wait = new WebDriverWait(driver, Duration.ofSeconds(Integer.valueOf(Config.getProperty("wait.VisibleForAll"))));
 		wait.until(ExpectedConditions.visibilityOfAllElements());
 		log.info("The 'wait until all elements is visible' is complete");
 	}

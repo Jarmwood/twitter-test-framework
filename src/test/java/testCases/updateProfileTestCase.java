@@ -13,9 +13,9 @@ import base.testBase;
 public class updateProfileTestCase extends testBase {
 	@Test(dataProvider = "getTestData")
 	public void UpdateProfileTestCase(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) {
-		setUp();
-		browserNavigation();
-		Config.getProperty("implicit.wait");
+//		setUp();
+//		browserNavigation();
+//		Config.getProperty("implicit.wait");
 
 //		loginPage login = new loginPage(driver);
 //		Config.getProperty("explicit.wait");

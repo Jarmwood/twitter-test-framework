@@ -10,7 +10,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import Pages.loginPage;
-import base.testBase;
+
+import static base.testBase.excel;
 
 /*
  * 
@@ -19,26 +20,40 @@ import base.testBase;
  *   
  * 
  */
-public class LoginTest extends testBase {
+public class LoginTest {
+
 	WebDriver driver;
 	loginPage login = new loginPage(driver);
 
 
 
 	@Test(dataProvider = "getTestData")
-	public void VerifyValidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
-
-		startBrowser("chrome","https://www.Twitter.com");
+	public void VerifyValidLogin(
+			String UserName,
+			String Password,
+			String NewTweet,
+			String UpdateProfile,
+			String SendMessage,
+			String MessageRecipient
+	) throws InterruptedException, IOException {
+		login.startBrowser("");
 		login.login_Twitter(UserName, Password);
-		tearDown();
+		//login.tearDown();
 	}
 	
 
 	@Test(dataProvider = "getTestData")
-	public void VerifyInvalidLogin(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) throws InterruptedException, IOException {
-		startBrowser("chrome","https://www.Twitter.com");
+	public void VerifyInvalidLogin(
+			String UserName,
+			String Password,
+			String NewTweet,
+			String UpdateProfile,
+			String SendMessage,
+			String MessageRecipient
+	) throws InterruptedException, IOException {
+		login.startBrowser("");
 		login.invalidLogin_Twitter(UserName, Password);
-		tearDown();
+	//	tearDown();
 	}
 
 	@DataProvider
