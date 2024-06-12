@@ -1,19 +1,12 @@
 package Pages;
 
-
-
-
 import base.testBase;
-import com.aventstack.extentreports.Status;
-import com.twitter.extentmanager.ExtentManager;
-import com.twitter.extentmanager.ExtentTestManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
-
+import testCases.baseTestClass;
 
 /*
  * 
@@ -30,45 +23,38 @@ public class loginPage extends testBase {
 	WebDriver driver;
 	
 	@FindBy(name="text")
-	WebElement UserNameField;
+	public WebElement UserNameField;
 	
 	@FindBy(name="session[password]")
-	WebElement PasswordField;
+	public WebElement PasswordField;
 	
-	@FindBy(xpath="//a[@data-testid=loginButton]")
-	WebElement signIn;
+	@FindBy(css="div[data-testid=LoginForm_Login_Button]")
+	public WebElement UserLoginButton;
 	
 	@FindBy(xpath="//a[@data-testid ='AppTabBar_Home_Link']")
-	WebElement homeProfile;
-
-	@FindBy(xpath="//div[@data-testid='LoginForm_Login_Button']")
-	WebElement UserLoginButton;
+	public WebElement homeProfile;
+	
+	
 	public loginPage(WebDriver driver) {           
-		this.driver = driver; 	
-		PageFactory.initElements(new AjaxElementLocatorFactory(driver, 20),this);
+		this.driver = testBase.driver;
+		PageFactory.initElements(driver,this);
 		}
-
-		public loginPage signinUser(){
-			signIn.click();
-			ExtentTestManager.getTest().log(Status.PASS,"User clicked on the 'Sign In' button");
-			return this;
+	
+	public void login_Twitter(String UserName, String Password) throws InterruptedException {
+		WebElement signIn = driver.findElement(By.xpath("//a[@data-testid='loginButton']"));
+		signIn.click();
+		UserNameField.sendKeys(UserName);
+		//log.info("username successfully entered into text box");
+		PasswordField.sendKeys(Password);
+		//log.info("password successfully entered into text box");
+		UserLoginButton.click();
+		Thread.sleep(2000);
+		if(homeProfile.isDisplayed()) {
+			System.out.println("User successfully logged into Twitter account");
+			//log.error("User successfully logged into Twitter account");
 		}
-
-		public loginPage sendPassword(String passwordInput){
-			PasswordField.sendKeys(passwordInput);
-			ExtentTestManager.getTest().log(Status.PASS,"User typed: "+passwordInput+" into the password field");
-			return this;
-		}
-		public loginPage sendUsername(String usernameInput){
-			UserNameField.sendKeys(usernameInput);
-			return this;
-		}
-		public HomePage clickLoginButton(){
-			UserLoginButton.click();
-			ExtentTestManager.getTest().log(Status.PASS,"User clicked on the 'Login' button");
-			return new HomePage(driver);
-		}
-
+		
+	}
 	public void invalidLogin_Twitter(String UserName, String Password) throws InterruptedException {
 		UserNameField.sendKeys(UserName);
 		//log.info("username successfully entered into text box");

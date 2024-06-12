@@ -31,7 +31,8 @@ import utilities.ReadingExcel;
 
 public class baseTestClass {
 	private WebDriver driver;
-	
+	//TODO: I have 2 classes containing browser logic. here and in base > testBase
+
 	public static Properties Config = new Properties();
 	public static Properties ObjRepo = new Properties();
 	private static FileInputStream fis;
