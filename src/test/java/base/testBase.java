@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import Enums.browserTypes;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -24,7 +23,6 @@ public class testBase {
 	public static Properties ObjRepo = new Properties();
 	public static FileInputStream fis;
 	public static WebDriverWait wait;
-	public static Logger log = Logger.getLogger(testBase.class);
 	public static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
 
 	
@@ -43,26 +41,18 @@ public class testBase {
 				case FIREFOX:
 					WebDriverManager.firefoxdriver().clearDriverCache().setup();
 					driver = new FirefoxDriver();
-					log.info("Firefox was launched successfully");
-					log.info(browser + " Navigated to " + URL);
 					driver.manage().window().maximize();
 				case EDGE:
 					WebDriverManager.edgedriver().clearDriverCache().setup();
 					driver = new EdgeDriver();
-					log.info("EdgeDriver was launched successfully");
-					log.info(browser + " Navigated to " + URL);
 					driver.manage().window().maximize();
 				case SAFARI:
 					WebDriverManager.safaridriver().clearDriverCache().setup();
 					driver = new SafariDriver();
-					log.info("safaridriver was launched successfully");
-					log.info(browser + " Navigated to " + URL);
 					driver.manage().window().maximize();
 				default:
 					WebDriverManager.chromedriver().clearDriverCache().setup();
 					driver = new ChromeDriver();
-					log.info("chromedriver was launched successfully");
-					log.info(browser + " Navigated to " + URL);
 					driver.manage().window().maximize();
 			}
 			driver.get(coreURL+URL);
@@ -76,7 +66,6 @@ public class testBase {
 	public static void tearDown() throws IOException {
 
 		driver.quit();
-		log.info("Closing the browser");
 		fis.close();
 
 	}
