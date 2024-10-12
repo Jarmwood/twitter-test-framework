@@ -6,11 +6,9 @@ import org.apache.poi.EncryptedDocumentException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import Pages.loginPage;
-import Pages.profilePage;
-import base.testBase;
+import base.testEngine;
 
-public class updateProfileTestCase extends testBase {
+public class updateProfileTestCase extends testEngine {
 	@Test(dataProvider = "getTestData")
 	public void UpdateProfileTestCase(String UserName, String Password, String NewTweet, String UpdateProfile,String SendMessage, String MessageRecipient) {
 //		setUp();
