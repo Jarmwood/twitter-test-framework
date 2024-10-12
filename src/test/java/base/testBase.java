@@ -38,7 +38,7 @@ public class testBase {
 
 
 
-	//selecting a element from a drop down
+	//selecting the element from a dropdown
 	public static void select(String key, String optionType, String option) {
 		try {
 		if (key.endsWith("_XPATH")) {
