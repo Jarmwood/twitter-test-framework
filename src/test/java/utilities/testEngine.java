@@ -14,29 +14,27 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
+import utilities.PropertiesConfigurations;
 import utilities.ReadingExcel;
 
 public class testEngine {
 
 	public static WebDriver driver;
-	public static Properties Config = new Properties();
-	public static Properties ObjRepo = new Properties();
-	public static FileInputStream fis;
 	public static WebDriverWait wait;
-	public static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
+	public static ReadingExcel excel = new ReadingExcel(STR."\{System.getProperty("user.dir")}/src/test/resources/excelTestData/TwitterData.xlsx");
 
-	
+
 	public static WebDriver startBrowser(String URL) {
 		String coreURL;
 		browserTypes browser;
 		try {
-			Config.load(Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/test/resources/Properties/Config.properties")));
-		} catch (IOException ignored) {
-		}
-		coreURL = Config.getProperty("QA_URL");
-		// initialize the browser
+			PropertiesConfigurations.Config.load(Files.newInputStream(
+					Paths.get(STR."\{System.getProperty("user.dir")}/src/test/resources/Properties/Config.properties")));
+		} catch (IOException ignored) {}
+
+		coreURL = PropertiesConfigurations.Config.getProperty("QA_URL");
 		if (driver != null) {
-			browser = browserTypes.valueOf(Config.getProperty("browserConfig").toUpperCase());
+			browser = browserTypes.valueOf(PropertiesConfigurations.Config.getProperty("browserConfig").toUpperCase());
 			switch (browser) {
 				case FIREFOX:
 					WebDriverManager.firefoxdriver().clearDriverCache().setup();
@@ -60,13 +58,11 @@ public class testEngine {
         return driver;
     }
 
-	
 
 	@AfterSuite // must run after all test class files have executed
 	public static void tearDown() throws IOException {
 		driver.quit();
-		fis.close();
-
+		PropertiesConfigurations.fis.close();
 	}
 
 
