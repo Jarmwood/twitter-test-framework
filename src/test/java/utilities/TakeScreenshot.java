@@ -29,12 +29,12 @@ public class TakeScreenshot extends testBase{
 		
 		/*
 		 * 1st: type casting driver to type TakesScreenshot and then calling the method "getScreenshotAs"
-		 * 2nd: setting the output type as file so we get the screenshot as a file
+		 * 2nd: setting the output type as file, so we get the screenshot as a file
 		 * 3rd: storing the screenshot in "screenshot" variable type file
 		 */
 		
 		//capture a screenshot and returns a file 
-		File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		File screenshot = ((TakesScreenshot)testBase.driver).getScreenshotAs(OutputType.FILE);
 		
 		/*
 		 * copy the file to a specific location 
