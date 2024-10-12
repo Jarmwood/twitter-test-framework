@@ -1,11 +1,8 @@
 package Pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import base.testBase;
 /*
  * this page will be utilized to verify the testing of the "send message test"
  

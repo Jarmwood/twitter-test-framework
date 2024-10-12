@@ -1,12 +1,11 @@
 package Pages;
 
-import base.testBase;
+import base.testEngine;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import testCases.baseTestClass;
 
 /*
  * 
@@ -19,7 +18,7 @@ import testCases.baseTestClass;
  *   implementing the OOPs concept encapsulation
  */
 
-public class loginPage extends testBase {
+public class loginPage extends testEngine {
 	WebDriver driver;
 	
 	@FindBy(name="text")
@@ -36,7 +35,7 @@ public class loginPage extends testBase {
 	
 	
 	public loginPage(WebDriver driver) {           
-		this.driver = testBase.driver;
+		this.driver = testEngine.driver;
 		PageFactory.initElements(driver,this);
 		}
 	

@@ -16,7 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 import utilities.ReadingExcel;
 
-public class testBase {
+public class testEngine {
 
 	public static WebDriver driver;
 	public static Properties Config = new Properties();
@@ -64,7 +64,6 @@ public class testBase {
 
 	@AfterSuite // must run after all test class files have executed
 	public static void tearDown() throws IOException {
-
 		driver.quit();
 		fis.close();
 

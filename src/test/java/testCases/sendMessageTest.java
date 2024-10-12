@@ -1,22 +1,16 @@
 package testCases;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.model.Log;
 
 import Pages.explorePage;
 import Pages.loginPage;
 import Pages.messagesPage;
 import Pages.profilePage;
-import base.testBase;
 
 public class sendMessageTest extends baseTestClass {
 	WebDriver driver;
