@@ -3,8 +3,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import static base.testEngine.driver;
-import static base.testEngine.wait;
+import java.util.Date;
+
+import static utilities.testEngine.driver;
+import static utilities.testEngine.wait;
 
 public class seleniumHelpers {
 
@@ -109,7 +111,30 @@ public class seleniumHelpers {
 
     }
 
+/**
+ * Method to return the current Time as
+ * Day_Mon_Date @ hh_mm 12-hour format
+ */
+public String getCurrentTime() {
+    Date myDate = new Date();
+    String fileName = myDate.toString().replace(":", "_").replace(" ", "_");
+    String day = fileName.substring(0, 10);
+    String time = fileName.substring(11, 19);
+    String [] x = time.split("_");
+    String AMPM = "";
+    int hour = Integer.parseInt(x[0]);
+    if(hour >= 12) {
+        AMPM = "PM";
+        hour = hour-12;
+    }else {
+        AMPM = "AM";
+    }
+    return STR."\{day} @ \{hour}_\{x[1]} \{AMPM}";
+}
+
 public void main() {
 }
+
+
 
 
