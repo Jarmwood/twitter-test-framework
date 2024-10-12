@@ -11,48 +11,44 @@ import Pages.explorePage;
 import Pages.loginPage;
 import Pages.messagesPage;
 import Pages.profilePage;
+import utilities.PropertiesConfigurations;
 
-public class sendMessageTest extends baseTestClass {
+import static utilities.testEngine.excel;
+import static utilities.testEngine.startBrowser;
+
+public class sendMessageTest{
 	WebDriver driver;
 @Test(dataProvider = "getTestData")
 	public void SendMessageTestCase(String UserName,String Password,String NewTweet,String UpdateProfile,String SendMessage,String MessageRecipient) {
-		setUp();
-		startBrowser("chrome","https://www.Twitter.com");
-		Config.getProperty("implicit.wait");
-		loginPage login = new loginPage(driver);
-		
-				//logging in
-				login.UserNameField.sendKeys(UserName);
-				log.info("username successfully entered into text box");
-				login.PasswordField.sendKeys(Password);
-				log.info("password successfully entered into text box");
-				login.UserLoginButton.click();
-				Config.getProperty("explicit.wait");
 
-		
-		explorePage explore = new explorePage(driver);
+	startBrowser("https://www.Twitter.com");
+    PropertiesConfigurations.Config.getProperty("implicit.wait");
+    loginPage login = new loginPage(driver);
 
-		explore.ExploreSearch.click();
-		explore.ExploreSearch.sendKeys("john doe");
-		explore.SearchedUserList.click();
-		
-		profilePage profile = new profilePage(driver);
+    login.UserNameField.sendKeys(UserName);
+    log.info("username successfully entered into text box");
+    login.PasswordField.sendKeys(Password);
+    log.info("password successfully entered into text box");
+    login.UserLoginButton.click();
+    PropertiesConfigurations.Config.getProperty("explicit.wait");
 
-		profile.FollowButton.click();
-		
-		messagesPage message = new messagesPage(driver);
-		
-		message.messagePageButton.click();
-		message.newMessage.click();
-		message.messageToRecipient.sendKeys("");// who is the message being sent to?
+    explorePage explore = new explorePage(driver);
+    explore.ExploreSearch.click();
+    explore.ExploreSearch.sendKeys("john doe");
+    explore.SearchedUserList.click();
+
+    profilePage profile = new profilePage(driver);
+    profile.FollowButton.click();
+
+    messagesPage message = new messagesPage(driver);
+    message.messagePageButton.click();
+    message.newMessage.click();
+    message.messageToRecipient.sendKeys("");// who is the message being sent to?
 		
 		
 	}
 
 @DataProvider
 public Object[][] getTestData() throws EncryptedDocumentException, IOException{
-	
-	Object [][] testData = excel.readExcelData("TwitterData");
-	
-	return testData;
+    return excel.readExcelData("TwitterData");
 }}

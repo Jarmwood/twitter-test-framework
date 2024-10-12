@@ -1,27 +1,26 @@
 package testCases;
 
 import java.io.IOException;
-
 import org.apache.poi.EncryptedDocumentException;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import Pages.loginPage;
+import utilities.PropertiesConfigurations;
+import utilities.testEngine;
 
 
-public class NewTweetTest extends baseTestClass{
+public class NewTweetTest{
 WebDriver driver;
 
 	@Test(dataProvider = "getTestData")
 	public void newTweetTestCase(String UserName,String Password,String NewTweet,String UpdateProfile,	String SendMessage,	String MessageRecipient) {
 		setUp();
-		startBrowser("chrome","https://www.Twitter.com");
+		testEngine.startBrowser("https://www.Twitter.com");
 		
 		loginPage login = new loginPage(driver);
-		Config.getProperty("explicit.wait");
-		
-		//logging in
+		PropertiesConfigurations.Config.getProperty("explicit.wait");
+
 //		login.UserNameField.sendKeys(UserName);
 //		log.info("username successfully entered into text box");
 //		login.PasswordField.sendKeys(Password);

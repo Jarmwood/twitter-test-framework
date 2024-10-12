@@ -15,7 +15,7 @@ import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.Markup;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
-import base.testEngine;
+import utilities.testEngine;
 import utilities.TakeScreenshot;
 
 
@@ -55,18 +55,13 @@ public class TestListeners extends testEngine implements ITestListener{
 		}
 		
 		//Add the screenshot to the report
-		try {
-			ExtentTestManager.getTest().addScreenCaptureFromPath(screenShotPath); //Adding the screen shot at the bottom of the report
-			
-			//Attach the screen shot in-line
-			ExtentTestManager.getTest().info("<b>" + "<font color=red>" + "Screenshot of Failure" +
-									"</font>" + "</b>", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());			
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-		
-		String failureMessage = "<b>" + "Test Case: " + testName + " FAILED" + "</b>";
+        ExtentTestManager.getTest().addScreenCaptureFromPath(screenShotPath); //Adding the screen shot at the bottom of the report
+
+        //Attach the screenshot in-line
+        ExtentTestManager.getTest().info("<b>" + "<font color=red>" + "Screenshot of Failure" +
+                                "</font>" + "</b>", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());
+
+        String failureMessage = "<b>" + "Test Case: " + testName + " FAILED" + "</b>";
 		Markup m = MarkupHelper.createLabel(failureMessage, ExtentColor.RED);
 		ExtentTestManager.getTest().log(Status.INFO, "------ Test Execution Completed ------");
 		ExtentTestManager.getTest().fail(m);

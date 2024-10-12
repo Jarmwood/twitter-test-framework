@@ -1,12 +1,13 @@
-package base;
+package utilities;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Properties;
+
 import Enums.browserTypes;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -14,8 +15,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
-import utilities.PropertiesConfigurations;
-import utilities.ReadingExcel;
 
 public class testEngine {
 
@@ -23,7 +22,12 @@ public class testEngine {
 	public static WebDriverWait wait;
 	public static ReadingExcel excel = new ReadingExcel(STR."\{System.getProperty("user.dir")}/src/test/resources/excelTestData/TwitterData.xlsx");
 
-
+	/**
+	 * Method to create the browser instance based
+	 * on the various browser options stated in the prop file
+	 * @param URL String: input for desired url address
+	 * @return driver: browser instance
+	 */
 	public static WebDriver startBrowser(String URL) {
 		String coreURL;
 		browserTypes browser;

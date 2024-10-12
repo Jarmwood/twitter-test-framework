@@ -1,6 +1,6 @@
 package Pages;
 
-import base.testEngine;
+import utilities.testEngine;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,27 +18,31 @@ import org.openqa.selenium.support.PageFactory;
  *   implementing the OOPs concept encapsulation
  */
 
-public class loginPage extends testEngine {
+public class loginPage {
 	WebDriver driver;
-	
+
+	@FindBy(xpath = "//span[contains(text(),'Sign in')]")
+	public WebElement signInButton;
 	@FindBy(name="text")
 	public WebElement UserNameField;
-	
 	@FindBy(name="session[password]")
 	public WebElement PasswordField;
-	
 	@FindBy(css="div[data-testid=LoginForm_Login_Button]")
 	public WebElement UserLoginButton;
-	
 	@FindBy(xpath="//a[@data-testid ='AppTabBar_Home_Link']")
 	public WebElement homeProfile;
-	
-	
+
 	public loginPage(WebDriver driver) {           
 		this.driver = testEngine.driver;
 		PageFactory.initElements(driver,this);
 		}
-	
+
+	/**
+	 * Method to login into the twitter application in a valid execution
+	 * @param UserName
+	 * @param Password
+	 * @throws InterruptedException
+	 */
 	public void login_Twitter(String UserName, String Password) throws InterruptedException {
 		WebElement signIn = driver.findElement(By.xpath("//a[@data-testid='loginButton']"));
 		signIn.click();
@@ -54,6 +58,13 @@ public class loginPage extends testEngine {
 		}
 		
 	}
+
+	/**
+	 * Method to login into the twitter application in an invalid execution
+	 * @param UserName
+	 * @param Password
+	 * @throws InterruptedException
+	 */
 	public void invalidLogin_Twitter(String UserName, String Password) throws InterruptedException {
 		UserNameField.sendKeys(UserName);
 		//log.info("username successfully entered into text box");

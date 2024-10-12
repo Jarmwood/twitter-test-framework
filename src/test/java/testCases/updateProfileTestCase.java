@@ -6,7 +6,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import base.testEngine;
+import utilities.testEngine;
 
 public class updateProfileTestCase extends testEngine {
 	@Test(dataProvider = "getTestData")
