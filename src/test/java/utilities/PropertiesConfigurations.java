@@ -14,8 +14,10 @@ public class PropertiesConfigurations {
     public static FileInputStream fis;
     private static final Logger log = LogManager.getLogger(PropertiesConfigurations.class);
 
+    /**
+     * Method to configure the connection to the properties files, "Config" and "ObjRepo".
+     */
     public static void setProps(){
-        // finding the Config properties file
         try {
             fis = new FileInputStream(
                     STR."\{System.getProperty("user.dir")}/src/test/resources/Properties/Config.properties");
