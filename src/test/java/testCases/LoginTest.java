@@ -1,31 +1,33 @@
 package testCases;
 
 import java.io.IOException;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
 import Pages.loginPage;
-
-import static base.testEngine.excel;
+import com.twitter.extentmanager.ExtentManager;
+import com.twitter.extentmanager.ExtentTestManager;
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+import utilities.testEngine;
 
 /*
- * 
  *  testing the functionalities of logging in with valid and invalid input 
- *  to ensure users are able to log in with their specific credentials and are connected to their account 
- *   
- * 
+ *  to ensure users are able to log in with their specific credentials and are connected to their account
  */
+
 public class LoginTest {
-
 	WebDriver driver;
-	loginPage login = new loginPage(driver);
+	loginPage login;
 
+	@BeforeClass
+	public void startDriver(){
+		ExtentTestManager.startTest("********** Login page Tests Started Running ***********");
+		login = new loginPage();
+		driver = testEngine.getDriver();
+		login.goToPage();
+	}
 
-
-	@Test(dataProvider = "getTestData")
+	@Test
 	public void VerifyValidLogin(
 			String UserName,
 			String Password,
@@ -34,7 +36,6 @@ public class LoginTest {
 			String SendMessage,
 			String MessageRecipient
 	) throws InterruptedException, IOException {
-		login.startBrowser("");
 		login.login_Twitter(UserName, Password);
 		//login.tearDown();
 	}
@@ -49,16 +50,13 @@ public class LoginTest {
 			String SendMessage,
 			String MessageRecipient
 	) throws InterruptedException, IOException {
-		login.startBrowser("");
 		login.invalidLogin_Twitter(UserName, Password);
 	//	tearDown();
 	}
 
-	@DataProvider
-	public Object[][] getTestData() throws EncryptedDocumentException, IOException {
-
-		Object[][] testData = excel.readExcelData("TwitterData");
-
-		return testData;
+	@Test
+	public void navigateToApplication(){
+		System.out.println(driver.getTitle());
+		Assert.assertTrue(driver.equals("twitter"));
 	}
 }

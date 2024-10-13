@@ -2,12 +2,14 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utilities.testEngine;
+
 import java.time.Duration;
-import static base.testEngine.driver;
-import static base.testEngine.wait;
+import java.util.Date;
+
+import static utilities.testEngine.*;
 
 public class seleniumHelpers {
-
     /**
      * Method to select an element from a dropdown
      *
@@ -52,16 +54,13 @@ public class seleniumHelpers {
             if (element.isEnabled() && element.isDisplayed()) {
                 System.out.println("Clicking on element with using java script click");
 
+                WebDriver driver = testEngine.getDriver();
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             } else {
                 System.out.println("Unable to click on element");
             }
-        } catch (StaleElementReferenceException e) {
-            System.out.println(STR."Element is not attached to the page document \{e.getStackTrace()}");
-        } catch (NoSuchElementException e) {
-            System.out.println(STR."Element was not found in DOM \{e.getStackTrace()}");
         } catch (Exception e) {
-            System.out.println(STR."Unable to click on element \{e.getStackTrace()}");
+            System.out.println("Unable to click on element "+ e.getStackTrace());
         }
     }
 
@@ -70,7 +69,8 @@ public class seleniumHelpers {
      * method to wait for all elements on a web page to load
      */
     public static void waitUntilVisible() {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebDriverWait wait;
+        wait = new WebDriverWait(testEngine.getDriver(), Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfAllElements());
     }
 
@@ -81,6 +81,8 @@ public class seleniumHelpers {
      * @param ele
      */
     public static void waitUntil(WebElement ele) {
+        WebDriverWait wait;
+        wait = new WebDriverWait(testEngine.getDriver(), Duration.ofSeconds(5));
         try {
             wait.until(ExpectedConditions.elementToBeClickable(ele));
         } catch (Exception e) {
@@ -92,7 +94,7 @@ public class seleniumHelpers {
      * method to capture a page title
      */
     public static void capturePageTitle() {
-        driver.getTitle();
+        testEngine.getDriver().getTitle();
     }
 
     /**
@@ -109,7 +111,30 @@ public class seleniumHelpers {
 
     }
 
+/**
+ * Method to return the current Time as
+ * Day_Mon_Date @ hh_mm 12-hour format
+ */
+public String getCurrentTime() {
+    Date myDate = new Date();
+    String fileName = myDate.toString().replace(":", "_").replace(" ", "_");
+    String day = fileName.substring(0, 10);
+    String time = fileName.substring(11, 19);
+    String [] x = time.split("_");
+    String AMPM = "";
+    int hour = Integer.parseInt(x[0]);
+    if(hour >= 12) {
+        AMPM = "PM";
+        hour = hour-12;
+    }else {
+        AMPM = "AM";
+    }
+    return day+ hour+ x[1] + AMPM;
+}
+
 public void main() {
 }
+
+
 
 

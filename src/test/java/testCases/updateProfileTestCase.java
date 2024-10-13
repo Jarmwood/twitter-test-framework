@@ -6,7 +6,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import base.testEngine;
+import utilities.testEngine;
 
 public class updateProfileTestCase extends testEngine {
 	@Test(dataProvider = "getTestData")
@@ -33,13 +33,5 @@ public class updateProfileTestCase extends testEngine {
 //		enterText("bioTextBox_XPATH",UpdateProfile);
 //		//click save button
 //		click("saveBio_XPATH ");
-	}
-
-	@DataProvider
-	public Object[][] getTestData() throws EncryptedDocumentException, IOException {
-
-		Object[][] testData = excel.readExcelData("TwitterData");
-
-		return testData;
 	}
 }

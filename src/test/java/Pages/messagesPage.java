@@ -20,7 +20,6 @@ public class messagesPage  {
 			+ " r-1ny4l3l r-mk0yit r-o7ynqc r-6416eg r-lrvibr']//div[@class='css-901oao r-1awozwy "
 			+ "r-13gxpu9 r-6koalj r-18u37iz r-16y2uox r-1qd0xha r-a023e6 r-vw2c0b r-1777fci r-eljoum r-dnmrzs r-bcqeeo"
 			+ " r-q4m81j r-qvutc0']//*[local-name()='svg']")
-	
 	public WebElement newMessage ;
 	
 	@FindBy(xpath ="//input[@placeholder='Search people']")
