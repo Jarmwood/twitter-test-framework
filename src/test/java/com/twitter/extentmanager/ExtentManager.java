@@ -12,7 +12,7 @@ public class ExtentManager {
 	private static ExtentReports extent;
     private static final String reportFileName = "Test-Automaton-Report"+".html";
     private static final String fileSeparator = FileSystems.getDefault().getSeparator();
-    private static final String reportFilepath = STR."\{System.getProperty("user.dir")}\{fileSeparator}TestReport";
+    private static final String reportFilepath = System.getProperty("user.dir")+ fileSeparator + "TestReport";
     private static final String reportFileLocation =  reportFilepath +fileSeparator+ reportFileName;
 
     public static ExtentReports getInstance() {
@@ -53,14 +53,14 @@ public class ExtentManager {
     	File testDirectory = new File(path);
         if (!testDirectory.exists()) {
         	if (testDirectory.mkdir()) {
-                System.out.println(STR."Directory: \{path} is created!");
+                System.out.println("Directory: "+ path+" is created!");
                 return reportFileLocation;
             } else {
-                System.out.println(STR."Failed to create directory: \{path}");
+                System.out.println("Failed to create directory: "+path);
                 return System.getProperty("user.dir");
             }
         } else {
-            System.out.println(STR."Directory already exists: \{path}");
+            System.out.println("Directory already exists: "+path);
         }
 		return reportFileLocation;
     }
