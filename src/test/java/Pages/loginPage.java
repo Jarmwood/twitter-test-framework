@@ -1,5 +1,6 @@
 package Pages;
 
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import utilities.testEngine;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,18 +9,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 /*
- * 
  * This class file is important because members who have an account should have access 
  * to their specific account, this class file variables and methods will help test the login capabilities of twitter
- * consisting of:
- * 	-email
- * 	-password
- * 	-login button
- *   implementing the OOPs concept encapsulation
  */
 
-public class loginPage {
-	WebDriver driver;
+public class loginPage extends BasePage {
+	private WebDriver driver;
 
 	@FindBy(xpath = "//span[contains(text(),'Sign in')]")
 	public WebElement signInButton;
@@ -32,9 +27,9 @@ public class loginPage {
 	@FindBy(xpath="//a[@data-testid ='AppTabBar_Home_Link']")
 	public WebElement homeProfile;
 
-	public loginPage(WebDriver driver) {           
-		this.driver = testEngine.driver;
-		PageFactory.initElements(driver,this);
+	public loginPage(){
+        driver = testEngine.getDriver();
+		PageFactory.initElements(new AjaxElementLocatorFactory(testEngine.getDriver(), testEngine.getExplicitWait()), this);
 		}
 
 	/**
@@ -78,5 +73,10 @@ public class loginPage {
 		//	log.error("The username and password you entered did not match our records. Please double-check and try again.");
 		
 		}
+	}
+
+	@Override
+	public void goToPage() {
+		driver.get(testEngine.getCoreUrl());
 	}
 }

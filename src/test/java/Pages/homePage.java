@@ -14,7 +14,8 @@ import org.openqa.selenium.support.PageFactory;
 
 
 public class homePage {
-	WebDriver driver;
+	public static final String URL = "#/home";
+	private WebDriver driver;
 	
 	//set your path to your elements
 	@FindBy(xpath = "//div[contains(@class, 'public-DraftStyleDefault')]")

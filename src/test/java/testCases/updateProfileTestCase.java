@@ -34,12 +34,4 @@ public class updateProfileTestCase extends testEngine {
 //		//click save button
 //		click("saveBio_XPATH ");
 	}
-
-	@DataProvider
-	public Object[][] getTestData() throws EncryptedDocumentException, IOException {
-
-		Object[][] testData = excel.readExcelData("TwitterData");
-
-		return testData;
-	}
 }

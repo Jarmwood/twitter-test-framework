@@ -32,7 +32,7 @@ public class TakeScreenshot extends testEngine {
 		 */
 		
 		//capture a screenshot and returns a file 
-		File screenshot = ((TakesScreenshot) testEngine.driver).getScreenshotAs(OutputType.FILE);
+		File screenshot = ((TakesScreenshot) testEngine.getDriver()).getScreenshotAs(OutputType.FILE);
 		
 		/*
 		 * copy the file to a specific location 
