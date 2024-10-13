@@ -1,19 +1,19 @@
 package utilities;
 
 import Components.DriverManager;
+import java.util.logging.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.util.*;
+import java.util.Properties;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.logging.LogManager;
 
 public class testEngine {
 	public static final boolean isDemo = false;
 	public static final boolean headlessMode = false;
-	//public static Logger log = new Logger();
+	public static Logger log = (Logger) LogManager.getLogManager();
 	private static Properties config;
 	private static String coreUrl = "";
 	private static WebDriver driver;
@@ -21,13 +21,16 @@ public class testEngine {
 	private static int explicitWait;
 	private static WebDriverWait wait;
 
-
+	/**
+	 * Initializes all static values and gets them ready for use.
+	 * Starts the browser of choice and Navigates to the provided url to start testing
+	 * @param Url
+	 */
 	private static void startBrowser(String Url) {
 		if (driver == null || driverType.isEmpty() || driverType.equalsIgnoreCase(getConfig().getProperty("browser"))) {
 			driverType = getConfig().getProperty("browser").toUpperCase();
 			driver = new DriverManager(headlessMode).getDriver();
 		}
-
 		try {
 			driver.get(getCoreUrl() + Url);
 		} catch (Exception e) {
@@ -35,19 +38,22 @@ public class testEngine {
 		}
 
 		driver.manage().window().maximize();
-		driver.manage().timeouts()
-				.implicitlyWait(Duration.ofSeconds(getConfigInt("implicit.wait")));
-//		log.info("************************************************");
-//		log.info("********* TEST ENVIRONMENT IS READY ************");
-//		log.info("************************************************");
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(getConfigInt("implicit.wait")));
+		log.info("************************************************");
+		log.info("********* TEST ENVIRONMENT IS READY ************");
+		log.info("************************************************");
 	}
+
+	/**
+	 * Loads the config file properties and then returns the reference
+	 * @return Properties: loaded config file
+	 */
 	public static Properties getConfig(){
 		if(null!=config)
 			return config;
 		Properties configTmp = new Properties();
 		try{
-			FileInputStream fis = new FileInputStream(
-					System.getProperty(("user.dir") + "src/test/resources/Properties/Config.properties"));
+			FileInputStream fis = new FileInputStream(System.getProperty(("user.dir") + "src/test/resources/Properties/Config.properties"));
 			configTmp.load(fis);
 			return configTmp;
 		}catch (IOException e){
@@ -82,9 +88,14 @@ public class testEngine {
 		return coreUrl;
 	}
 
+	/**
+	 * Getter for the driver. Will start the browser if the driver has not been initialized.
+	 * @param URL
+	 * @return WebDriver
+	 */
 	public static WebDriver getDriver(String URL){
 		if(null==driver||driver.toString().contains("null")){
-			//log.info("Starting Browser...");
+			log.info("Starting Browser...");
 			startBrowser(URL);
 		}
 		return driver;
