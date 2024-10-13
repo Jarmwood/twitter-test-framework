@@ -20,7 +20,7 @@ public class PropertiesConfigurations {
     public static void setProps(){
         try {
             fis = new FileInputStream(
-                    STR."\{System.getProperty("user.dir")}/src/test/resources/Properties/Config.properties");
+                    System.getProperty("user.dir")+"/src/test/resources/Properties/Config.properties");
             log.info("Config File Found!");
         } catch (FileNotFoundException e) {
             log.error("Config file Not Found, Check File Path");
@@ -39,7 +39,7 @@ public class PropertiesConfigurations {
         // get ObjRepo properties file
         try {
             fis = new FileInputStream(
-                    STR."\{System.getProperty("user.dir")}/src/test/resources/Properties/ObjRepo.properties");
+                    System.getProperty("user.dir")+"/src/test/resources/Properties/ObjRepo.properties");
             log.info("Object Repository File Found!");
         } catch (FileNotFoundException e) {
             log.error("Object Repository File Not Found, Check File Path");
