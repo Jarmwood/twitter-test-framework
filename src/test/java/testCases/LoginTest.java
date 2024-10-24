@@ -22,7 +22,7 @@ public class LoginTest {
 	@BeforeClass
 	public void startDriver(){
 		ExtentTestManager.startTest("********** Login page Tests Started Running ***********");
-		login = new loginPage();
+		login = new   loginPage();
 		driver = testEngine.getDriver();
 		login.goToPage();
 	}

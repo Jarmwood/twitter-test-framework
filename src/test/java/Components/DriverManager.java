@@ -1,7 +1,6 @@
 package Components;
 
 import Enums.browserTypes;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import utilities.testEngine;
 import utilities.PropertiesConfigurations;
-import utilities.ReadingExcel;
 import java.util.*;
 import java.io.IOException;
 import java.util.Locale;
@@ -23,7 +21,6 @@ public class DriverManager {
     Properties config;
     public static WebDriver driver;
     public static WebDriverWait wait;
-    public static ReadingExcel excel = new ReadingExcel(System.getProperty("user.dir")+"/src/test/resources/excelTestData/TwitterData.xlsx");
 
     public DriverManager() {
         this(false);
@@ -34,12 +31,10 @@ public class DriverManager {
      * on the various browser options stated in the prop file
      **/
     public DriverManager(boolean headless) {
-       // log = testEngine.log;
         config = testEngine.getConfig();
-
         browserTypes driverType=browserTypes.valueOf(config.getProperty("browser").toUpperCase(Locale.ENGLISH));
-
         String headlessLog = "";
+
         if(headless)
             headlessLog=" ***** In Headless Mode *****";
 
@@ -47,25 +42,21 @@ public class DriverManager {
         if (driver != null) {
             switch (driverType) {
                 case FIREFOX:
-                    WebDriverManager.firefoxdriver().clearDriverCache().setup();
                     driver = new FirefoxDriver();
                     driver.manage().window().maximize();
                     break;
                 case EDGE:
-                    WebDriverManager.edgedriver().clearDriverCache().setup();
                     driver = new EdgeDriver();
                     driver.manage().window().maximize();
                     log.info("MS Edge successfully launched {}", headlessLog);
                     break;
                 case SAFARI:
-                    WebDriverManager.safaridriver().clearDriverCache().setup();
                     driver = new SafariDriver();
                     driver.manage().window().maximize();
                     log.info("Safari successfully launched {}", headlessLog);
                     break;
                 default:
                     ChromeOptions options = getChromeOptions(headless);
-                    WebDriverManager.chromedriver().clearDriverCache().setup();
                     driver = new ChromeDriver(options);
                     driver.manage().deleteAllCookies();
                     driver.manage().window().maximize();

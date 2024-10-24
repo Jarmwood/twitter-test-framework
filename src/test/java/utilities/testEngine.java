@@ -1,8 +1,6 @@
 package utilities;
 
 import Components.DriverManager;
-import java.util.logging.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Properties;
@@ -10,10 +8,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
 
+
 public class testEngine {
 	public static final boolean isDemo = false;
 	public static final boolean headlessMode = false;
-	public static Logger log = (Logger) LogManager.getLogManager();
 	private static Properties config;
 	private static String coreUrl = "";
 	private static WebDriver driver;
@@ -27,6 +25,7 @@ public class testEngine {
 	 * @param Url
 	 */
 	private static void startBrowser(String Url) {
+		PropertiesConfigurations.setProps();
 		if (driver == null || driverType.isEmpty() || driverType.equalsIgnoreCase(getConfig().getProperty("browser"))) {
 			driverType = getConfig().getProperty("browser").toUpperCase();
 			driver = new DriverManager(headlessMode).getDriver();
@@ -39,9 +38,6 @@ public class testEngine {
 
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(getConfigInt("implicit.wait")));
-		log.info("************************************************");
-		log.info("********* TEST ENVIRONMENT IS READY ************");
-		log.info("************************************************");
 	}
 
 	/**
@@ -72,7 +68,7 @@ public class testEngine {
 			}
 		} catch (Exception Ignore) {
 			configInt = 5;
-			//log.warn("{} has been set to a illegal variable. Please make sure it is set to a number", name);
+			//log.warn("{} has been set to an illegal variable. Please make sure it is set to a number", name);
 		}
 		return configInt;
 	}
@@ -90,12 +86,12 @@ public class testEngine {
 
 	/**
 	 * Getter for the driver. Will start the browser if the driver has not been initialized.
-	 * @param URL
+	 * @param URL: string input of the url target.
 	 * @return WebDriver
 	 */
 	public static WebDriver getDriver(String URL){
 		if(null==driver||driver.toString().contains("null")){
-			log.info("Starting Browser...");
+			//log.info("Starting Browser...");
 			startBrowser(URL);
 		}
 		return driver;
